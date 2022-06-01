@@ -23,9 +23,6 @@ from redash.utils import filter_none
 from redash.utils.configuration import ConfigurationContainer, ValidationError
 from redash.tasks.general import test_connection, get_schema
 from redash.serializers import serialize_job
-from redash.worker import get_job_logger
-
-logger = get_job_logger(__name__)
 
 
 class DataSourceTypeListResource(BaseResource):
@@ -153,12 +150,11 @@ class DataSourceListResource(BaseResource):
 
     @require_admin
     def post(self):
-        logger.info("Creating data source")
         req = request.get_json(True)
         require_fields(req, ("options", "name", "type"))
 
         schema = get_configuration_schema_for_query_runner_type(req["type"])
-        logger.info('>> Schema %s', schema)
+
         if schema is None:
             abort(400)
 
@@ -173,7 +169,7 @@ class DataSourceListResource(BaseResource):
 
             models.db.session.commit()
         except IntegrityError as e:
-            logger.error(e)
+
             if req["name"] in str(e):
                 abort(
                     400,
@@ -260,15 +256,12 @@ class DataSourceTestResource(BaseResource):
         data_source = get_object_or_404(
             models.DataSource.get_by_id_and_org, data_source_id, self.current_org
         )
-        logger.info('data_source --->%s', data_source)
         response = {}
 
         job = test_connection.delay(data_source.id)
-        logger.info('job --->%s', job)
         while not (job.is_finished or job.is_failed):
             time.sleep(1)
             job.refresh()
-        logger.info('job.result --->%s', job.result)
         if isinstance(job.result, Exception):
             response = {"message": str(job.result), "ok": False}
         else:
