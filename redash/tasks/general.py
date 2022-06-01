@@ -66,7 +66,7 @@ def send_mail(to, subject, html, text):
 def test_connection(data_source_id):
     try:
         data_source = models.DataSource.get_by_id(data_source_id)
-        print('data_source--->', data_source)
+        logger.info('data_source--->%s', data_source)
         data_source.query_runner.test_connection()
     except Exception as e:
         return e

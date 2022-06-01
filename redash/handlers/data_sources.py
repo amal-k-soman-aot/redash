@@ -260,15 +260,15 @@ class DataSourceTestResource(BaseResource):
         data_source = get_object_or_404(
             models.DataSource.get_by_id_and_org, data_source_id, self.current_org
         )
-        print('data_source --->', data_source)
+        logger.info('data_source --->%s', data_source)
         response = {}
 
         job = test_connection.delay(data_source.id)
-        print('job --->', job)
+        logger.info('job --->%s', job)
         while not (job.is_finished or job.is_failed):
             time.sleep(1)
             job.refresh()
-        print('job.result --->', job.result)
+        logger.info('job.result --->%s', job.result)
         if isinstance(job.result, Exception):
             response = {"message": str(job.result), "ok": False}
         else:

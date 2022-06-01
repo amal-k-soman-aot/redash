@@ -144,11 +144,11 @@ class BaseQueryRunner(object):
         return annotated_query
 
     def test_connection(self):
-        print('self.noop_query--->', self.noop_query)
+        logger.info('self.noop_query--->%s', self.noop_query)
         if self.noop_query is None:
             raise NotImplementedError()
         data, error = self.run_query(self.noop_query, None)
-        print('data, error ', data, error)
+        logger.info('data, error : %s, %s', data, error)
         if error is not None:
             raise Exception(error)
 

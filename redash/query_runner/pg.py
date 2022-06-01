@@ -268,26 +268,26 @@ class PostgreSQL(BaseSQLQueryRunner):
                     dict(zip((column["name"] for column in columns), row))
                     for row in cursor
                 ]
-                print('columns, rows ->', columns, rows)
+                logger.info('columns, rows ->%s, %s', columns, rows)
                 data = {"columns": columns, "rows": rows}
                 error = None
                 json_data = json_dumps(data, ignore_nan=True, cls=PostgreSQLJSONEncoder)
-                print('json_data ->', json_data)
+                logger.info('json_data ->%s', json_data)
             else:
                 error = "Query completed but it returned no data."
                 json_data = None
-                print('Query completed but it returned no data ->', json_data)
+                logger.info('Query completed but it returned no data ->%s', json_data)
         except (select.error, OSError) as e:
-            print("Query interrupted. Please retry.")
+            logger.info("Query interrupted. Please retry.")
             error = "Query interrupted. Please retry."
             json_data = None
         except psycopg2.DatabaseError as e:
-            print("psycopg2.DatabaseError.")
-            print(e)
+            logger.info("psycopg2.DatabaseError.")
+            logger.info(e)
             error = str(e)
             json_data = None
         except (KeyboardInterrupt, InterruptException, JobTimeoutException):
-            print('0000000000000')
+            logger.info('0000000000000')
             connection.cancel()
             raise
         finally:
