@@ -1,11 +1,11 @@
 name: Forms flow analytics push to registry
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - formsflow
       - new_org_endpoint
-  workflow_dispatch:
 
 defaults:
   run:
