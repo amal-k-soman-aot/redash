@@ -268,11 +268,9 @@ class PostgreSQL(BaseSQLQueryRunner):
                     dict(zip((column["name"] for column in columns), row))
                     for row in cursor
                 ]
-                logger.info('columns, rows ->%s, %s', columns, rows)
                 data = {"columns": columns, "rows": rows}
                 error = None
                 json_data = json_dumps(data, ignore_nan=True, cls=PostgreSQLJSONEncoder)
-                logger.info('json_data ->%s', json_data)
             else:
                 error = "Query completed but it returned no data."
                 json_data = None
