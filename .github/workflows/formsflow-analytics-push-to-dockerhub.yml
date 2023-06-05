@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - formsflow
+      - patchfix
   workflow_dispatch:
   
 defaults:
