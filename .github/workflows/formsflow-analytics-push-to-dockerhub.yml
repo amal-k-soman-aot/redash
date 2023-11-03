@@ -5,7 +5,7 @@ on:
     branches:
       - formsflow
   workflow_dispatch:
-  
+
 defaults:
   run:
     shell: bash
