@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - formsflow
+      - security_update
   workflow_dispatch:
 
 defaults:
@@ -73,6 +74,7 @@ jobs:
           context: ${{ matrix.context }}
           # builder: ${{ steps.buildx.outputs.name }}
           push: true
+          platforms: linux/amd64,linux/arm64/v8
           # file: ${{ matrix.dockerfile }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
