@@ -1068,6 +1068,7 @@ class Dashboard(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model
     def all(cls, org, group_ids, user_id):
         for d in Dashboard.query.all():
             logger.debug(f"D ---->{d}")
+
         query = (
             Dashboard.query.options(joinedload(Dashboard.user).load_only("id", "name", "details", "email"))
             .distinct(cls.lowercase_name, Dashboard.created_at, Dashboard.slug)
@@ -1077,11 +1078,12 @@ class Dashboard(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model
             .outerjoin(DataSourceGroup, Query.data_source_id == DataSourceGroup.data_source_id)
             .filter(
                 Dashboard.is_archived.is_(False),
-                (DataSourceGroup.group_id.in_(group_ids) | (Dashboard.user_id == user_id)),
+                # (DataSourceGroup.group_id.in_(group_ids) | (Dashboard.user_id == user_id)),
                 Dashboard.org == org,
             )
         )
-
+        if not settings.MULTI_ORG:
+            query = query.filter(DataSourceGroup.group_id.in_(group_ids) | (Dashboard.user_id == user_id))
         query = query.filter(or_(Dashboard.user_id == user_id, Dashboard.is_draft.is_(False)))
 
         return query
