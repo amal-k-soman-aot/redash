@@ -150,6 +150,7 @@ class DataSourceListResource(BaseResource):
             abort(400)
 
         try:
+            logger.debug(f"self.current_org {self.current_org}")
             datasource = models.DataSource.create_with_group(
                 org=self.current_org, name=req["name"], type=req["type"], options=config
             )

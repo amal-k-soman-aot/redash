@@ -62,7 +62,7 @@ class DashboardListResource(BaseResource):
         objects.
         """
         search_term = request.args.get("q")
-        logger.debug(f"self.current_org, self.current_user.group_ids, self.current_user.id ---> {self.current_org}, {self.current_user.group_ids}, {self.current_user.id} ")
+        logger.debug(f"self.current_org, self.current_user.group_ids, self.current_user.id ---> {self.current_org}, {self.current_user.group_ids}, {self.current_user.id}, {search_term}")
         print()
         if search_term:
             results = models.Dashboard.search(
