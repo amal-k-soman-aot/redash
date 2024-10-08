@@ -45,7 +45,10 @@ class Organization(TimestampMixin, db.Model):
         logger.debug(f"self.groups : {self.groups}")
         for g in self.groups.all():
             logger.debug(f"GROUP {g.name}---{g.type}")
-        return self.groups.filter(Group.name == "default", Group.type == Group.BUILTIN_GROUP).first()
+        default_group = self.groups.filter(Group.name == "default", Group.type == Group.BUILTIN_GROUP).first()
+        if not default_group:
+            default_group = self.groups.first()
+        return default_group
 
     @property
     def google_apps_domains(self):
