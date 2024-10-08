@@ -9,6 +9,10 @@ from .mixins import TimestampMixin
 from .types import MutableDict
 from .users import Group, User
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 @generic_repr("id", "name", "slug")
 class Organization(TimestampMixin, db.Model):
@@ -37,6 +41,10 @@ class Organization(TimestampMixin, db.Model):
 
     @property
     def default_group(self):
+        logger.debug("INSIDE Default Group ")
+        logger.debug(f"self.groups : {self.groups}")
+        for g in self.groups.all():
+            logger.debug(f"GROUP {g.name}---{g.type}")
         return self.groups.filter(Group.name == "default", Group.type == Group.BUILTIN_GROUP).first()
 
     @property
