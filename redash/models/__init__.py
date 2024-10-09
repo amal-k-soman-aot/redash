@@ -1066,9 +1066,6 @@ class Dashboard(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model
 
     @classmethod
     def all(cls, org, group_ids, user_id):
-        for d in Dashboard.query.all():
-            logger.debug(f"D ---->{d}")
-
         query = (
             Dashboard.query.options(joinedload(Dashboard.user).load_only("id", "name", "details", "email"))
             .distinct(cls.lowercase_name, Dashboard.created_at, Dashboard.slug)

@@ -43,8 +43,6 @@ class Organization(TimestampMixin, db.Model):
     def default_group(self):
         logger.debug("INSIDE Default Group ")
         logger.debug(f"self.groups : {self.groups}")
-        for g in self.groups.all():
-            logger.debug(f"GROUP {g.name}---{g.type}")
         default_group = self.groups.filter(Group.name == "default", Group.type == Group.BUILTIN_GROUP).first()
         if not default_group:
             default_group = self.groups.first()
