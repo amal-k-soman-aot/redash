@@ -233,12 +233,15 @@ class DataSourcePauseResource(BaseResource):
 class DataSourceTestResource(BaseResource):
     @require_admin
     def post(self, data_source_id):
+        logger.info("TEST Datasource starting")
         data_source = get_object_or_404(models.DataSource.get_by_id_and_org, data_source_id, self.current_org)
-
+        logger.info(f"Found data source {data_source}")
         response = {}
 
         job = test_connection.delay(data_source.id)
+        logger.info(f"job {job}")
         while not (job.is_finished or job.is_failed):
+            logger.info(f"job.is_finished {job.is_finished} --> {job.is_failed}")
             time.sleep(1)
             job.refresh()
 

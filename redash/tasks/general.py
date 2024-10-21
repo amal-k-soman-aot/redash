@@ -64,7 +64,9 @@ def send_mail(to, subject, html, text):
 @job("queries", timeout=30, ttl=90)
 def test_connection(data_source_id):
     try:
+        logger.debug(f"Inside test_connection {data_source_id}")
         data_source = models.DataSource.get_by_id(data_source_id)
+
         data_source.query_runner.test_connection()
     except Exception as e:
         return e
