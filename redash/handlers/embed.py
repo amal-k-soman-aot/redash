@@ -48,7 +48,7 @@ def embed(query_id, visualization_id, org_slug=None):
 
 
 @routes.route(org_scoped_rule("/public/dashboards/<token>"), methods=["GET"])
-# @login_required
+@login_required
 @csp_allows_embeding
 def public_dashboard(token, org_slug=None):
     logger.info(f"Inside >>> public_dashboard : {token}")
