@@ -122,9 +122,12 @@ def get_user_from_api_key(api_key, query_id):
         if user.is_disabled:
             user = None
     except models.NoResultFound:
+        logger.info("---NoResultFound----")
         try:
             api_key = models.ApiKey.get_by_api_key(api_key)
+            logger.info(f"api_key --- {api_key}")
             user = models.ApiUser(api_key, api_key.org, [])
+            logger.info(f"user --- {user}")
         except models.NoResultFound:
             if query_id:
                 query = models.Query.get_by_id_and_org(query_id, org)
@@ -135,7 +138,7 @@ def get_user_from_api_key(api_key, query_id):
                         list(query.groups.keys()),
                         name="ApiKey: Query {}".format(query.id),
                     )
-
+    logger.info(f"user --------->>>> {user}")
     return user
 
 
@@ -275,6 +278,7 @@ def init_app(app):
 
 
 def create_and_login_user(org, name, email, picture=None):
+    logger.info("create_and_login_user ", org, name, email)
     try:
         user_object = models.User.get_by_email_and_org(email, org)
         if user_object.is_disabled:
