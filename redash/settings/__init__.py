@@ -97,7 +97,7 @@ REMEMBER_COOKIE_DURATION = int(os.environ.get("REDASH_REMEMBER_COOKIE_DURATION",
 # on the specific deployment.
 # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
 # for more information.
-FRAME_OPTIONS = os.environ.get("REDASH_FRAME_OPTIONS", "deny")
+FRAME_OPTIONS = os.environ.get("REDASH_FRAME_OPTIONS", "")
 FRAME_OPTIONS_ALLOW_FROM = os.environ.get("REDASH_FRAME_OPTIONS_ALLOW_FROM", "")
 
 # Whether and how to send Strict-Transport-Security response headers.
@@ -117,7 +117,7 @@ HSTS_INCLUDE_SUBDOMAINS = parse_boolean(os.environ.get("REDASH_HSTS_INCLUDE_SUBD
 # for more information. E.g.:
 CONTENT_SECURITY_POLICY = os.environ.get(
     "REDASH_CONTENT_SECURITY_POLICY",
-    "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; font-src 'self' data:; img-src 'self' http: https: data: blob:; object-src 'none'; frame-src redash.io *.aot-technologies.com;",
+    "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; font-src 'self' data:; img-src 'self' http: https: data: blob:; object-src 'none';frame-ancestors 'self' *.aot-technologies.com; frame-src redash.io *.aot-technologies.com;",
 )
 CONTENT_SECURITY_POLICY_REPORT_URI = os.environ.get("REDASH_CONTENT_SECURITY_POLICY_REPORT_URI", "")
 CONTENT_SECURITY_POLICY_REPORT_ONLY = parse_boolean(
