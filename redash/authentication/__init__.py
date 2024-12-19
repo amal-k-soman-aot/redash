@@ -43,6 +43,7 @@ def sign(key, path, expires):
 
 @login_manager.user_loader
 def load_user(user_id_with_identity):
+    logger.info("000000000")
     user = api_key_load_user_from_request(request)
     if user:
         return user
@@ -61,6 +62,7 @@ def load_user(user_id_with_identity):
 
 
 def request_loader(request):
+    logger.info("1111111")
     user = None
     if settings.AUTH_TYPE == "hmac":
         user = hmac_load_user_from_request(request)
@@ -106,6 +108,7 @@ def hmac_load_user_from_request(request):
 
 
 def get_user_from_api_key(api_key, query_id):
+    logger.info(f"get_user_from_api_key---->> {api_key} ---> {query_id}")
     if not api_key:
         return None
 
@@ -113,6 +116,7 @@ def get_user_from_api_key(api_key, query_id):
 
     # TODO: once we switch all api key storage into the ApiKey model, this code will be much simplified
     org = current_org._get_current_object()
+    logger.info(f"org---->> {org}")
     try:
         user = models.User.get_by_api_key_and_org(api_key, org)
         if user.is_disabled:
@@ -151,6 +155,7 @@ def get_api_key_from_request(request):
 
 
 def api_key_load_user_from_request(request):
+    logger.info("2222222")
     api_key = get_api_key_from_request(request)
     if request.view_args is not None:
         query_id = request.view_args.get("query_id", None)
@@ -215,6 +220,7 @@ def log_user_logged_in(app, user):
 
 @login_manager.unauthorized_handler
 def redirect_to_login():
+    logger.info("Insode redirect_to_login --->>>>")
     is_xhr = request.headers.get("X-Requested-With") == "XMLHttpRequest"
     if is_xhr or "/api/" in request.path:
         return {"message": "Couldn't find resource. Please login and try again."}, 404
