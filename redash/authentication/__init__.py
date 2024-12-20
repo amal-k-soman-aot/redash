@@ -138,7 +138,7 @@ def get_user_from_api_key(api_key, query_id, request=None):
                         list(query.groups.keys()),
                         name="ApiKey: Query {}".format(query.id),
                     )
-    if user is None and '/public/dashboards' in request.path:
+    if user is None and ('/public/dashboards' in request.path or '/dashboards/public' in request.path):
         logger.info("User not found")
         user = models.User.get_by_org(org).first()
     logger.info(f"user --------->>>> {user}")
