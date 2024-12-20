@@ -107,7 +107,7 @@ def hmac_load_user_from_request(request):
     return None
 
 
-def get_user_from_api_key(api_key, query_id):
+def get_user_from_api_key(api_key, query_id, request=None):
     logger.info(f"get_user_from_api_key---->> {api_key} ---> {query_id}")
     if not api_key:
         return None
@@ -138,6 +138,9 @@ def get_user_from_api_key(api_key, query_id):
                         list(query.groups.keys()),
                         name="ApiKey: Query {}".format(query.id),
                     )
+    if user is None and '/public/dashboards' in request.path:
+        logger.info("User not found")
+        user = models.User.get_by_org(org).first()
     logger.info(f"user --------->>>> {user}")
     return user
 
@@ -162,7 +165,7 @@ def api_key_load_user_from_request(request):
     api_key = get_api_key_from_request(request)
     if request.view_args is not None:
         query_id = request.view_args.get("query_id", None)
-        user = get_user_from_api_key(api_key, query_id)
+        user = get_user_from_api_key(api_key, query_id, request)
     else:
         user = None
 
