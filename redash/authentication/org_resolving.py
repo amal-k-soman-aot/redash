@@ -4,8 +4,7 @@ from flask import g, request
 from werkzeug.local import LocalProxy
 
 from redash.models import Organization
-
-
+from redash.utils.format import CustomFormatter
 def _get_current_org():
     if "org" in g:
         return g.org
@@ -17,6 +16,7 @@ def _get_current_org():
 
     g.org = Organization.get_by_slug(slug)
     logging.debug("Current organization: %s (slug: %s)", g.org, slug)
+    CustomFormatter.org_id = g.org
     return g.org
 
 

@@ -5,8 +5,8 @@ from rq import get_current_job
 from rq.decorators import job as rq_job
 
 from redash import rq_redis_connection, settings
+from redash.authentication.org_resolving import _get_current_org
 from redash.tasks.worker import Queue as RedashQueue
-
 default_operational_queues = ["periodic", "emails", "default"]
 default_query_queues = ["scheduled_queries", "queries", "schemas"]
 default_queues = default_operational_queues + default_query_queues
@@ -26,12 +26,13 @@ job = partial(
 
 
 class CurrentJobFilter(logging.Filter):
+    org_id = "default"
     def filter(self, record):
         current_job = get_current_job()
 
         record.job_id = current_job.id if current_job else ""
         record.job_func_name = current_job.func_name if current_job else ""
-
+        record.org_id = _get_current_org()
         return True
 
 
